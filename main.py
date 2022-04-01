@@ -35,3 +35,4 @@ for pastebin in PASTEBINS:
         continue
     for webhook in DISCORD_WEBHOOK_REGEX.findall(resp.text):
         delete_webhook(webhook[0])
+    time.sleep(5)

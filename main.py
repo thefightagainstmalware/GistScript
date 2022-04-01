@@ -28,11 +28,12 @@ def delete_webhook(webhook: str) -> None:
     print(resp)
     print(requests.delete(webhook))
 
-for pastebin in PASTEBINS:
-    resp = requests.get(pastebin)
-    if resp.status_code != 200:
-        print("Error: " + str(resp.status_code))
-        continue
-    for webhook in DISCORD_WEBHOOK_REGEX.findall(resp.text):
-        delete_webhook(webhook[0])
+while True:
+    for pastebin in PASTEBINS:
+        resp = requests.get(pastebin)
+        if resp.status_code != 200:
+            print("Error: " + str(resp.status_code))
+            continue
+        for webhook in DISCORD_WEBHOOK_REGEX.findall(resp.text):
+            delete_webhook(webhook[0])
     time.sleep(5)

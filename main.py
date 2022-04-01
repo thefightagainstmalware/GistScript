@@ -3,13 +3,12 @@ import requests, re, datetime, time
 DISCORD_WEBHOOK_REGEX = re.compile(
     r"(https?:\/\/(ptb\.|canary\.)?discord(app)?\.com\/api\/webhooks\/(\d{18})\/([\w\-]{68}))"
 )
-ID_EXTRACTOR = re.compile(r"\/.{32}\/")
 
 with open("gists.txt") as f:
-    GISTS = f.read().splitlines()
+    PASTEBINS = f.read().splitlines()
 
 
-def delete_webhook(webhook):
+def delete_webhook(webhook: str) -> None:
     with open("404.txt", "r+") as f:
         if webhook in f.read().splitlines():
             return
@@ -27,23 +26,12 @@ def delete_webhook(webhook):
         },
     )
     print(resp)
-    requests.delete(webhook)
+    print(requests.delete(webhook))
 
-
-GIST_IDS = [ID_EXTRACTOR.search(gist).group(0)[1:-1] for gist in GISTS]
-
-last_updated = {gist: 0 for gist in GIST_IDS}
-
-while True:
-    for gist in GIST_IDS:
-        data = requests.get(f"https://api.github.com/gists/{gist}").json()
-        ts = datetime.datetime.strptime(
-            data["updated_at"], "%Y-%m-%dT%H:%M:%SZ"
-        ).timestamp()
-        if ts > last_updated[gist]:
-            last_updated[gist] = ts
-            for file in data["files"]:
-                matches = DISCORD_WEBHOOK_REGEX.finditer(data["files"][file]["content"])
-                for match in matches:
-                    delete_webhook(match.group(0))
-    time.sleep(60)
+for pastebin in PASTEBINS:
+    resp = requests.get(pastebin)
+    if resp.status_code != 200:
+        print("Error: " + str(resp.status_code))
+        continue
+    for webhook in DISCORD_WEBHOOK_REGEX.findall(resp.text):
+        delete_webhook(webhook[0])

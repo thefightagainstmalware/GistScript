@@ -30,7 +30,7 @@ def delete_webhook(webhook: str) -> None:
 
 while True:
     for pastebin in PASTEBINS:
-        resp = requests.get(pastebin)
+        resp = requests.get(pastebin, headers={"User-Agent": "AntiMalwareBot/gistscript (+https://discord.gg/TWhrmZFXqb)"})
         if resp.status_code != 200:
             print("Error: " + str(resp.status_code))
             continue

@@ -40,12 +40,26 @@ while True:
             },
         )
         if resp.status_code != 200:
-            print("Error: " + str(resp.status_code))
+            print(f"Error: {resp.status_code} on {pastebin}")
             continue
 
+        oldtext = resp.text
         text = resp.text
-        while BASE64_REGEX.match(text) is not None:  # screw you, massileQOL
-            text = base64.b64decode(text)
+        icanhasbase64 = BASE64_REGEX.match(text)
+        while (
+            icanhasbase64 is not None
+            and icanhasbase64.start() == 0
+            and icanhasbase64.end() == len(text)
+        ):  # screw you, massileQOL
+            print(f"Base64 detected on url ({pastebin}), decoding...")
+            try:
+                text = base64.b64decode(text).decode("utf-8")
+            except UnicodeDecodeError as e:
+                print("not base64")
+                text = oldtext
+                break
+            print("Decoded: " + text)
+            icanhasbase64 = BASE64_REGEX.match(text)
 
         for webhook in DISCORD_WEBHOOK_REGEX.findall(text):
             delete_webhook(webhook[0])

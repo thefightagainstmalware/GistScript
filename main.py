@@ -61,6 +61,6 @@ while True:
             print("Decoded: " + text)
             icanhasbase64 = BASE64_REGEX.match(text)
 
-        for webhook in DISCORD_WEBHOOK_REGEX.findall(text):
+        for webhook in DISCORD_WEBHOOK_REGEX.finditer(text):
             delete_webhook(webhook[0])
     time.sleep(5)

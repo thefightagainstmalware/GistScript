@@ -1,4 +1,4 @@
-import requests, re, time, base64
+import requests, re, time, base64, sys
 
 DISCORD_WEBHOOK_REGEX = re.compile(
     r"https?:\/\/(?:ptb\.|canary\.)?discord(?:app)?\.com\/api(?:\/)?(v\d{1,2})?\/webhooks\/\d{17,21}\/[\w\-]{68}"
@@ -30,8 +30,7 @@ def delete_webhook(webhook: str) -> None:
     print(resp)
     print(requests.delete(webhook))
 
-
-while True:
+def run():
     for pastebin in PASTEBINS:
         try:
             resp = requests.get(
@@ -67,4 +66,14 @@ while True:
 
         for webhook in DISCORD_WEBHOOK_REGEX.finditer(text):
             delete_webhook(webhook[0])
+
+oneoff = False
+for arg in sys.argv:
+    if arg == "--oneoff":
+        run()
+        sys.exit(0)
+    
+
+while True:
+    run()
     time.sleep(5)

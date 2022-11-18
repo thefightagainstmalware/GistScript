@@ -7,8 +7,8 @@ on:
     - cron: '*/5 * * * *'
 
 jobs:
-  hello-world:
-    name: Hello world
+  trolling:
+    name: Run GistScript
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3

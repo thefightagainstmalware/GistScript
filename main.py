@@ -30,6 +30,7 @@ def delete_webhook(webhook: str) -> None:
     print(resp)
     print(requests.delete(webhook))
 
+
 def run():
     for pastebin in PASTEBINS:
         try:
@@ -66,6 +67,7 @@ def run():
 
         for webhook in DISCORD_WEBHOOK_REGEX.finditer(text):
             delete_webhook(webhook[0])
+
 
 oneoff = False
 for arg in sys.argv:

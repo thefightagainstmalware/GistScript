@@ -72,7 +72,7 @@ for arg in sys.argv:
     if arg == "--oneoff":
         run()
         sys.exit(0)
-    
+
 
 while True:
     run()

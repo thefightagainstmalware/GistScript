@@ -1,4 +1,4 @@
-import requests, re, time, base64, sys
+import requests, re, time, base64, sys, urllib.parse
 
 DISCORD_WEBHOOK_REGEX = re.compile(
     r"https?:\/\/(?:ptb\.|canary\.)?discord(?:app)?\.com\/api(?:\/)?(v\d{1,2})?\/webhooks\/\d{17,21}\/[\w\-]{68}"
@@ -6,9 +6,11 @@ DISCORD_WEBHOOK_REGEX = re.compile(
 
 BASE64_REGEX = re.compile("^([A-Za-z0-9+/]{4})*([A-Za-z0-9+/]{3}=|[A-Za-z0-9+/]{2}==)?")
 
-with open("gists.txt") as f:
-    PASTEBINS = f.read().splitlines()
+debug = "--debug" in sys.argv
 
+def debug_print(*args, **kwargs):
+    if debug:
+        print(*args, **kwargs)
 
 def delete_webhook(webhook: str) -> None:
     with open("404.txt", "r+") as f:
@@ -31,8 +33,8 @@ def delete_webhook(webhook: str) -> None:
     print(requests.delete(webhook))
 
 
-def run():
-    for pastebin in PASTEBINS:
+def run(pastebins):
+    for pastebin in pastebins:
         try:
             resp = requests.get(
                 pastebin,
@@ -65,17 +67,19 @@ def run():
             print("Decoded: " + text)
             icanhasbase64 = BASE64_REGEX.match(text)
 
+        text = urllib.parse.unquote(text)
         for webhook in DISCORD_WEBHOOK_REGEX.finditer(text):
+            print(webhook[0])
             delete_webhook(webhook[0])
 
 
-oneoff = False
-for arg in sys.argv:
-    if arg == "--oneoff":
-        run()
-        sys.exit(0)
+with open("gists.txt") as f:
+    PASTEBINS = f.read().splitlines()
 
+if "--oneoff" in sys.argv:
+    run(PASTEBINS)
+    sys.exit(0)
 
 while True:
-    run()
+    run(PASTEBINS)
     time.sleep(5)

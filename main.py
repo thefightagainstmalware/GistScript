@@ -8,9 +8,11 @@ BASE64_REGEX = re.compile("^([A-Za-z0-9+/]{4})*([A-Za-z0-9+/]{3}=|[A-Za-z0-9+/]{
 
 debug = "--debug" in sys.argv
 
+
 def debug_print(*args, **kwargs):
     if debug:
         print(*args, **kwargs)
+
 
 def delete_webhook(webhook: str) -> None:
     with open("404.txt", "r+") as f:

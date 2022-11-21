@@ -31,8 +31,8 @@ def delete_webhook(webhook: str) -> None:
             "User-Agent": "AntiMalwareBot/gistscript (+https://discord.gg/TWhrmZFXqb)"
         },
     )
-    print(resp)
-    print(requests.delete(webhook))
+    debug_print(resp)
+    debug_print(requests.delete(webhook))
 
 
 def run(pastebins):
@@ -59,19 +59,19 @@ def run(pastebins):
             and icanhasbase64.start() == 0
             and icanhasbase64.end() == len(text)
         ):  # screw you, massileQOL
-            print(f"Base64 detected on url ({pastebin}), decoding...")
+            debug_print(f"Base64 detected on url ({pastebin}), decoding...")
             try:
                 text = base64.b64decode(text).decode("utf-8")
             except UnicodeDecodeError as e:
-                print("not base64")
+                debug_print("not base64")
                 text = oldtext
                 break
-            print("Decoded: " + text)
+            debug_print("Decoded: " + text)
             icanhasbase64 = BASE64_REGEX.match(text)
 
         text = urllib.parse.unquote(text)
         for webhook in DISCORD_WEBHOOK_REGEX.finditer(text):
-            print(webhook[0])
+            debug_print(webhook[0])
             delete_webhook(webhook[0])
 
 

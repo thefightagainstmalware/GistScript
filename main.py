@@ -32,6 +32,8 @@ def delete_webhook(webhook: str) -> None:
         },
     )
     debug_print(resp)
+    if resp.status_code == 404:
+        return
     debug_print(requests.delete(webhook))
 
 

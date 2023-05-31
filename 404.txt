@@ -17,3 +17,7 @@ https://discord.com/api/webhooks/959840522783031316/etVxaHyF8GcsbBkAQ3lIlVWNyHac
 https://discord.com/api/webhooks/959841171033710642/O8_H0ZQ-6U4WFNq9p5BIkB_LwVud1rUZrrcljFJG8S5CKTplAIfss10En04kdETpMzM5
 https://discord.com/api/webhooks/960609943201939506/pcJZzth9De2iRaObOP5mMr3_lmNGxtKgWArB1H6Bg7e0wTkN_hHwPOHQ1FgKazAmCnh3
 https://discord.com/api/webhooks/960957581109637140/wKE4X7lqYkjFZXASgqSL0KFBtSVS3iolobAB-lGg43QMZ7x1bNHQE1xKFuIZx1-OvZEf
+https://discord.com/api/webhooks/1002675682935066694/hUnbh9qQU66YY-r5lggB5h0sEthiWOslG-w7HKtN7H5LyUIkNg9KHj2KL5b5jxbBLokF
+https://discord.com/api/webhooks/972583244291784726/8-MZKKGm-sUxVLaFKaUX8Y1iKjqkad_rYM1Why_3yMP6KWe6u99MSldVu1RZZkEhGIO8
+https://discord.com/api/webhooks/974779853951864862/UVgeYQHdICgbvtJywn5u2qFOSOdnH2PVyssKBZf4ZJ49p6wuSjEXA5iU675c_aOQ1Vt7
+https://discord.com/api/webhooks/1051279663726604359/QUSjtSJ9dDn0fd5t9p2d1DaN-tJ6rkxQDswHJ4Y7PBmdufqlB8GRvGTYB8bh75UADtBX

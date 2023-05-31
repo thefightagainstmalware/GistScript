@@ -1,4 +1,4 @@
-import requests, re, time, base64, sys, urllib.parse
+import requests, re, time, base64, sys, urllib.parse, os
 
 DISCORD_WEBHOOK_REGEX = re.compile(
     r"https?:\/\/(?:ptb\.|canary\.)?discord(?:app)?\.com\/api(?:\/)?(v\d{1,2})?\/webhooks\/\d{17,21}\/[\w\-]{68}"
@@ -14,18 +14,22 @@ def debug_print(*args, **kwargs):
         print(*args, **kwargs)
 
 
-def delete_webhook(webhook: str) -> None:
+def delete_webhook(webhook: str, log: "str | None" = None) -> None:
     with open("404.txt", "r+") as f:
         if webhook in f.read().splitlines():
             return
         f.write(webhook + "\n")
+
+    if log:
+        requests.post(log, json={"content": requests.get(webhook).text()})
+
     resp = requests.post(
         webhook,
         json={
-            "content": "We are Anonymous. We are Legion. We do not forgive. We do not forget. Expect us.",
+            "content": "反病毒软件战争万岁！！！！！！！！！！！！！！",
             "tts": True,
-            "username": "Anonymous via vive la revolution and The Fight Against Malware",
-            "avatar_url": "https://cdn.discordapp.com/icons/910733698452815912/8dd25417b5c2a2cf49e1b98a74a15aa8.webp?size=96",
+            "username": "The Fight Against Malware",
+            "avatar_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/49/Flag_of_Ukraine.svg/1920px-Flag_of_Ukraine.svg.png",
         },
         headers={
             "User-Agent": "AntiMalwareBot/gistscript (+https://discord.gg/TWhrmZFXqb)"
@@ -37,7 +41,7 @@ def delete_webhook(webhook: str) -> None:
     debug_print(requests.delete(webhook))
 
 
-def run(pastebins):
+def run(pastebins, logging_webhook=None):
     for pastebin in pastebins:
         try:
             resp = requests.get(
@@ -74,16 +78,19 @@ def run(pastebins):
         text = urllib.parse.unquote(text)
         for webhook in DISCORD_WEBHOOK_REGEX.finditer(text):
             debug_print(webhook[0])
-            delete_webhook(webhook[0])
+            delete_webhook(webhook[0], webhook)
+
+
+webhook = os.getenv("GISTSCRIPT_LOGGING_WEBHOOK")
 
 
 with open("gists.txt") as f:
     PASTEBINS = f.read().splitlines()
 
 if "--oneoff" in sys.argv:
-    run(PASTEBINS)
+    run(PASTEBINS, webhook)
     sys.exit(0)
 
 while True:
-    run(PASTEBINS)
+    run(PASTEBINS, webhook)
     time.sleep(5)

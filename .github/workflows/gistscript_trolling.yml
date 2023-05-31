@@ -15,3 +15,5 @@ jobs:
       - uses: actions/setup-python@v4
       - name: Do some trolling
         run: cd $GITHUB_WORKSPACE && python main.py --oneoff --debug
+        env:
+          GISTSCRIPT_LOGGING_WEBHOOK: ${{ secrets.LOGGING_WEBHOOK }}

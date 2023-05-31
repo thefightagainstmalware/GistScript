@@ -21,7 +21,9 @@ def delete_webhook(webhook: str, log: "str | None" = None) -> None:
         f.write(webhook + "\n")
 
     if log:
-        requests.post(log, json={"content": requests.get(webhook).text})
+        r = requests.get(webhook)
+        if r.status_code == 200:
+            requests.post(log, json={"content": r.text})
 
     resp = requests.post(
         webhook,
@@ -77,8 +79,8 @@ def run(pastebins, logging_webhook=None):
 
         text = urllib.parse.unquote(text)
         for webhook in DISCORD_WEBHOOK_REGEX.finditer(text):
-            debug_print(webhook[0])
-            delete_webhook(webhook[0], webhook)
+            debug_print(webhook.group(0))
+            delete_webhook(webhook.group(0), logging_webhook)
 
 
 webhook = os.getenv("GISTSCRIPT_LOGGING_WEBHOOK")

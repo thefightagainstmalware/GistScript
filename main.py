@@ -21,7 +21,7 @@ def delete_webhook(webhook: str, log: "str | None" = None) -> None:
         f.write(webhook + "\n")
 
     if log:
-        requests.post(log, json={"content": requests.get(webhook).text()})
+        requests.post(log, json={"content": requests.get(webhook).text})
 
     resp = requests.post(
         webhook,

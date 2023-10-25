@@ -12,6 +12,8 @@ debug = "--debug" in sys.argv
 def debug_print(*args, **kwargs):
     if debug:
         print(*args, **kwargs)
+    if os.getenv("GISTSCRIPT_LOGGING_WEBHOOK"):
+        requests.post(os.getenv("GISTSCRIPT_LOGGING_WEBHOOK"), json={"content": " ".join(args)})
 
 
 def delete_webhook(webhook: str, log: "str | None" = None) -> None:

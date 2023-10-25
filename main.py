@@ -13,7 +13,7 @@ def debug_print(*args, **kwargs):
     if debug:
         print(*args, **kwargs)
     if os.getenv("GISTSCRIPT_LOGGING_WEBHOOK"):
-        requests.post(os.getenv("GISTSCRIPT_LOGGING_WEBHOOK"), json={"content": " ".join(args)})
+        requests.post(os.getenv("GISTSCRIPT_LOGGING_WEBHOOK"), json={"content": " ".join(map(str, args))})
 
 
 def delete_webhook(webhook: str, log: "str | None" = None) -> None:
